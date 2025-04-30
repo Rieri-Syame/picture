@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Camera Capture Demo</title>
+  <style>
+    body { font-family: sans-serif; padding: 1rem; }
+    #preview { margin-top: 1rem; max-width: 100%; height: auto; border: 1px solid #ccc; }
+    #controls { margin-top: 1rem; }
+  </style>
+</head>
+<body>
+
+  <h1>Take a Picture</h1>
+  
+  <!-- This input will invoke the native camera on supporting mobile devices -->
+  <input id="cameraInput" 
+         type="file" 
+         accept="image/*" 
+         capture="environment">
+  
+  <div id="controls">
+    <button id="checkBtn" disabled>Check Image</button>
+  </div>
+  
+  <!-- Where we'll show the captured image -->
+  <img id="preview" src="" alt="Your photo will appear here">
+
+  <script>
+    const cameraInput = document.getElementById('cameraInput');
+    const preview = document.getElementById('preview');
+    const checkBtn = document.getElementById('checkBtn');
+
+    // When a file is selected (i.e. photo taken), preview it
+    cameraInput.addEventListener('change', () => {
+      const file = cameraInput.files[0];
+      if (!file) return;
+      
+      // Enable the “Check Image” button now that we have a photo
+      checkBtn.disabled = false;
+      
+      // Show the image in the <img> preview
+      const reader = new FileReader();
+      reader.onload = e => {
+        preview.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // Example “Check Image” handler—replace with your own logic
+    checkBtn.addEventListener('click', () => {
+      if (!preview.src) return;
+      
+      // Here you could run validation, send to a server, etc.
+      alert('Image is loaded and ready to process!');
+      
+      // e.g., send via fetch:
+      // fetch('/upload', {
+      //   method: 'POST',
+      //   body: cameraInput.files[0]
+      // })
+      // .then(...)
+      // .catch(...);
+    });
+  </script>
+
+</body>
+</html>
